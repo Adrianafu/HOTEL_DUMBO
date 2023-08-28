@@ -1,12 +1,11 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const conexion = require('../Config/db'); 
 
+// router.use(express.json());
+//router.use(express.urlencoded({ extended: true }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.post('/empleado', (req, res) => {
+router.post('/', (req, res) => {
 
     data = {
         IdEmpleado: 0,
@@ -55,7 +54,7 @@ function generaNuevoId(callback) {
 }
 
 
-app.get('/empleado', (req, res) => {
+router.get('/', (req, res) => {
     let sql = 'SELECT * FROM Empleado';
     conexion.query(sql, (err,  resul) => {
         if(err){
@@ -68,7 +67,7 @@ app.get('/empleado', (req, res) => {
 });
 
 
-app.delete('/empleado/:cod', (req, res) => {
+router.delete('/:cod', (req, res) => {
 
     let sql = 'DELETE FROM Empleado WHERE IdEmpleado=?';
 
@@ -82,7 +81,7 @@ app.delete('/empleado/:cod', (req, res) => {
     });
 });
 
-app.put('/empleado/:cod', (req, res) => {
+router.put('/:cod', (req, res) => {
     
     let IdEmpleado = req.params.cod;
     let Nombre = req.body.Nombre;
@@ -107,6 +106,4 @@ app.put('/empleado/:cod', (req, res) => {
     });
 });
 
-app.listen(5000, () => {
-    console.log('Servidor iniciado en el puerto 5000');
-});
+module.exports = router;

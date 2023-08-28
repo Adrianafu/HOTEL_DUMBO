@@ -1,10 +1,10 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const conexion = require('../Config/db'); 
 
-app.use(express.json());
+//router.use(express.json());
 
-app.get("/paquete", (req, res) => {
+router.get("/", (req, res) => {
     const sql = "SELECT * FROM Paquete";
 
     conexion.query(sql, (err, result) => {
@@ -16,7 +16,7 @@ app.get("/paquete", (req, res) => {
         }
     });
 });
-app.post("/paquete", (req, res) => {
+router.post("/", (req, res) => {
     let latestId;
     let getLatestIdSql = "SELECT MAX(IdPaquete) as latestId FROM Paquete";
 
@@ -53,7 +53,7 @@ app.post("/paquete", (req, res) => {
     });
 });
 
-app.put("/paquete/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     const idPaquete = req.params.id;
     const data = {
         Tipo: req.body.Tipo,
@@ -74,7 +74,7 @@ app.put("/paquete/:id", (req, res) => {
     });
 });
 
-app.delete("/paquete/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     const idPaquete = req.params.id;
 
     const deleteSql = "DELETE FROM Paquete WHERE IdPaquete = ?";
@@ -89,7 +89,4 @@ app.delete("/paquete/:id", (req, res) => {
 });
 
 
-app.listen(5000, () => {
-    console.log('Servidor iniciado en el puerto 5000');
-});
-
+module.exports = router;

@@ -1,12 +1,12 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const conexion = require('../Config/db'); 
 
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//router.use(express.json());
+//router.use(express.urlencoded({ extended: true }));
 
-app.post('/usuario', (req, res) => {
+router.post('/', (req, res) => {
 
     data = {
         IdEmpleado: 0,
@@ -48,7 +48,7 @@ function generaNuevoId(callback) {
 }
 
 
-app.get('/usuario', (req, res) => {
+router.get('/', (req, res) => {
     let sql = 'SELECT * FROM Usuario';
     conexion.query(sql, (err,  resul) => {
         if(err){
@@ -61,7 +61,7 @@ app.get('/usuario', (req, res) => {
 });
 
 
-app.delete('/usuario/:cod', (req, res) => {
+router.delete('/:cod', (req, res) => {
 
     let sql = 'DELETE FROM Usuario WHERE IdEmpleado=?';
 
@@ -75,7 +75,7 @@ app.delete('/usuario/:cod', (req, res) => {
     });
 });
 
-app.put('/usuario/:cod', (req, res) => {
+router.put('/:cod', (req, res) => {
     
     let IdEmpleado = req.params.cod;
     let Nombre = req.body.Nombre;
@@ -93,6 +93,4 @@ app.put('/usuario/:cod', (req, res) => {
     });
 });
 
-app.listen(5000, () => {
-    console.log('Servidor iniciado en el puerto 5000');
-});
+module.exports = router;

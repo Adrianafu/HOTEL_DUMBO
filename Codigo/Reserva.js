@@ -1,11 +1,11 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const conexion = require('../Config/db'); 
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//router.use(express.json());
+//router.use(express.urlencoded({ extended: true }));
 
-app.post('/reserva', (req, res) => {
+router.post('/', (req, res) => {
 
     data = {
         IdReserva: 0,
@@ -52,7 +52,7 @@ function generaNuevoId(callback) {
     });
 }
 
-app.get('/reserva', (req, res) => {
+router.get('/', (req, res) => {
     let sql = 'SELECT * FROM Reserva';
     conexion.query(sql, (err,  resul) => {
         if(err){
@@ -64,7 +64,7 @@ app.get('/reserva', (req, res) => {
     });
 });
 
-app.delete('/reserva/:cod', (req, res) => {
+router.delete('/:cod', (req, res) => {
 
     let sql = 'DELETE FROM Reserva WHERE IdReserva=?';
 
@@ -78,7 +78,7 @@ app.delete('/reserva/:cod', (req, res) => {
     });
 });
 
-app.put('/reserva/:cod', (req, res) => {
+router.put('/:cod', (req, res) => {
     
     let IdReserva = req.params.cod;
     let IdCliente = req.body.IdCliente;
@@ -102,6 +102,4 @@ app.put('/reserva/:cod', (req, res) => {
     });
 });
 
-app.listen(5000, () => {
-    console.log('Servidor iniciado en el puerto 5000');
-});
+module.exports = router;

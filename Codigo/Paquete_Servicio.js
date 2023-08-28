@@ -1,10 +1,10 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const conexion = require('../Config/db'); 
 
-app.use(express.json());
+//router.use(express.json());
 
-app.get('/paqueteservicio', (req, res) => {
+router.get('/', (req, res) => {
   const sql = 'SELECT * FROM Paquete_Servicio';
   conexion.query(sql, (err, result) => {
     if (err) {
@@ -16,7 +16,7 @@ app.get('/paqueteservicio', (req, res) => {
 });
 });
 
-app.put('/paqueteservicio/:idPaquete/:idServicio', (req, res) => {
+router.put('/:idPaquete/:idServicio', (req, res) => {
   const idPaquete = req.params.idPaquete;
   const idServicio = req.params.idServicio;
   const data = req.body;
@@ -32,7 +32,7 @@ app.put('/paqueteservicio/:idPaquete/:idServicio', (req, res) => {
 });
 
 
-app.post('/paqueteservicio', (req, res) => {
+router.post('/', (req, res) => {
   const SER = req.body;
   const sql = 'INSERT INTO Paquete_Servicio SET ?';
   conexion.query(sql, SER, (err, result) => {
@@ -45,7 +45,7 @@ app.post('/paqueteservicio', (req, res) => {
   });
 });
 
-app.delete('/paqueteservicio/:idPaquete/:idServicio', (req, res) => {
+router.delete('/:idPaquete/:idServicio', (req, res) => {
   const idPaquete = req.params.idPaquete;
   const idServicio = req.params.idServicio;
 
@@ -60,7 +60,5 @@ app.delete('/paqueteservicio/:idPaquete/:idServicio', (req, res) => {
   });
 });
   
-app.listen(5000, () => {
-    console.log('Servidor iniciado en el puerto 5000');
-});
+module.exports = router;
 
