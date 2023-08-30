@@ -36,6 +36,7 @@ router.post('/', (req, res) => {
                 Nombre: req.body.Nombre,
                 ApellidoP: req.body.ApellidoP,
                 ApellidoM: req.body.ApellidoM,
+                EstadoCivil: req.body.EstadoCivil,
                 Genero: req.body.Genero,
                 Pais: req.body.Pais,
                 Celular: req.body.Celular,
@@ -64,6 +65,7 @@ router.put('/:id', (req, res) => {
         Nombre: req.body.Nombre,
         ApellidoP: req.body.ApellidoP,
         ApellidoM: req.body.ApellidoM,
+        EstadoCivil: req.body.EstadoCivil,
         Genero: req.body.Genero,
         Pais: req.body.Pais,
         Celular: req.body.Celular,
@@ -83,17 +85,25 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-    const idCliente = req.params.id;
 
-    const deleteSql = "DELETE FROM Cliente WHERE IdCliente = ?";
-    conexion.query(deleteSql, idCliente, (err, result) => {
-        if (err) {
+    let sql = 'DELETE FROM Reserva WHERE IdCliente=?';
+    let sql_2 = 'DELETE FROM Cliente WHERE IdCliente=?';
+
+    conexion.query(sql, req.params.id, (err,  resul) => {
+        if(err){
             console.log(err.message);
-            res.json({ mensaje: 'Error inesperado' });
-        } else {
-            res.json(result);
+        }
+    });
+
+    conexion.query(sql_2, req.params.id, (err,  resul) => {
+        if(err){
+            console.log(err.message);
+            res.json({mensaje: 'Error indesperado'});
+        }else{
+            res.json(resul);
         }
     });
 });
+
 
 module.exports = router;

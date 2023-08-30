@@ -9,7 +9,7 @@ const conexion = require('../Config/db');
 router.post('/', (req, res) => {
 
     data = {
-        IdEmpleado: 0,
+        IdUsuario: 0,
         Nombre: req.body.Nombre,
         Codigo: req.body.Codigo
     };

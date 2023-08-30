@@ -69,9 +69,16 @@ router.get('/', (req, res) => {
 
 router.delete('/:cod', (req, res) => {
 
-    let sql = 'DELETE FROM Empleado WHERE IdEmpleado=?';
+    let sql = 'DELETE FROM Reserva WHERE IdEmpleado=?';
+    let sql_2 = 'DELETE FROM Empleado WHERE IdEmpleado=?';
 
     conexion.query(sql, req.params.cod, (err,  resul) => {
+        if(err){
+            console.log(err.message);
+        }
+    });
+
+    conexion.query(sql_2, req.params.cod, (err,  resul) => {
         if(err){
             console.log(err.message);
             res.json({mensaje: 'Error indesperado'});

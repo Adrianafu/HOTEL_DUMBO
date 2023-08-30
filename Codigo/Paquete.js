@@ -36,6 +36,7 @@ router.post("/", (req, res) => {
                 Precio: req.body.Precio,
                 FechaInicio: req.body.FechaInicio,
                 FechaTermino: req.body.FechaTermino,
+                Dias: req.body.Dias,
                 Vigente: req.body.Vigente
             };
 
@@ -60,6 +61,7 @@ router.put("/:id", (req, res) => {
         Precio: req.body.Precio,
         FechaInicio: req.body.FechaInicio,
         FechaTermino: req.body.FechaTermino,
+        Dias: req.body.Dias,
         Vigente: req.body.Vigente
     };
 
@@ -74,16 +76,23 @@ router.put("/:id", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
-    const idPaquete = req.params.id;
+router.delete('/:id', (req, res) => {
 
-    const deleteSql = "DELETE FROM Paquete WHERE IdPaquete = ?";
-    conexion.query(deleteSql, idPaquete, (err, result) => {
-        if (err) {
+    let sql = 'DELETE FROM Reserva WHERE IdPaquete=?';
+    let sql_2 = 'DELETE FROM Paquete WHERE IdPaquete=?';
+
+    conexion.query(sql, req.params.id, (err,  resul) => {
+        if(err){
             console.log(err.message);
-            res.json({ mensaje: "Error inesperado" });
-        } else {
-            res.json(result);
+        }
+    });
+
+    conexion.query(sql_2, req.params.id, (err,  resul) => {
+        if(err){
+            console.log(err.message);
+            res.json({mensaje: 'Error indesperado'});
+        }else{
+            res.json(resul);
         }
     });
 });
