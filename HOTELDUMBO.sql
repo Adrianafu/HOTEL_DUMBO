@@ -5,7 +5,7 @@ CREATE TABLE Empleado (
     Nombre VARCHAR(50) NOT NULL,
     ApellidoP VARCHAR(50) NOT NULL,
     ApellidoM VARCHAR(50) NOT NULL,
-    Genero BIT NOT NULL,
+    Genero CHAR (1) NOT NULL,
     Celular INT NOT NULL,
     Direccion VARCHAR(100) NOT NULL,
     Cargo CHAR(1) NOT NULL,
@@ -20,7 +20,8 @@ CREATE TABLE Cliente (
     Nombre VARCHAR(50) NOT NULL,
     ApellidoP VARCHAR(50) NOT NULL,
     ApellidoM VARCHAR(50) NOT NULL,
-    Genero BIT NOT NULL,
+    EstadoCivil CHAR (1) NOT NULL,
+    Genero CHAR (1) NOT NULL,
     Pais VARCHAR(50) NOT NULL,
     Celular INT NOT NULL,
     CI VARCHAR(20) NOT NULL,
@@ -30,7 +31,7 @@ CREATE TABLE Cliente (
 -- Creación de la tabla Usuario
 use HotelDumbo;
 CREATE TABLE Usuario (
-    IdEmpleado INT PRIMARY KEY,
+    IdUsuario INT PRIMARY KEY,
     Nombre VARCHAR(50) NOT NULL,
     Codigo VARCHAR(50) NOT NULL
 );
@@ -43,7 +44,8 @@ CREATE TABLE Paquete (
     Precio DECIMAL(10, 2) NOT NULL,
     FechaInicio DATE NOT NULL,
     FechaTermino DATE NOT NULL,
-    Vigente DATE NOT NULL
+    Dias int NOT NULL,
+    Vigente CHAR (1) NOT NULL
 );
 
 -- Creación de la tabla Servicio
@@ -82,34 +84,28 @@ CREATE TABLE Reserva (
     FOREIGN KEY (idPaquete) REFERENCES Paquete(idPaquete)
 );
 
-use HotelDumbo;
-INSERT INTO Cliente (IdCliente, Nombre, ApellidoP, ApellidoM, Genero, Pais, Celular, CI, FechaNacimiento)
-VALUES 
-    (1, 'Ana', 'Rodríguez', 'López', 1, 'México', 765434598, '123456789 LP', '1990-08-15'),
-    (2, 'Juan', 'García', 'Pérez', 0, 'España', 98765432, '987654321 SCZ', '1995-03-22');
-    
-use HotelDumbo;
-INSERT INTO Paquete (IdPaquete, Tipo, Precio, FechaInicio, FechaTermino, Vigente)
-VALUES 
-    (1, 'Matrimonia', 800, '2023-09-01', '2023-09-10', '2023-09-15'),
-    (2, 'Simple', 300 , '2023-10-01', '2023-10-15', '2023-10-20');
-    
-use HotelDumbo;    
-INSERT INTO Servicio (IdServicio, Descripcion)
-VALUES 
-    (1, 'Piscina'),
-    (2, 'Servicio de Restaurante');
-
-use HotelDumbo;    
-INSERT INTO Paquete_Servicio (IdPaquete, IdServicio)
-VALUES 
-    (1, 1),
-    (1, 2);
-
-
 select * from Empleado;
 select * from Cliente;
 select * from Paquete;
 select * from Servicio;
 select * from Paquete_Servicio;
 select * from Reserva;
+select * from Usuario;
+
+use HotelDumbo;   
+SELECT P.IdPaquete, P.Tipo, COUNT(R.IdReserva) AS CantidadReservas
+FROM Paquete P
+JOIN Reserva R ON P.IdPaquete = R.IdPaquete
+GROUP BY P.IdPaquete, P.Tipo
+ORDER BY CantidadReservas DESC
+LIMIT 10;
+
+use HotelDumbo;   
+SELECT p.IdPaquete, p.Tipo, COUNT(r.IdReserva) AS TotalReservas
+FROM Paquete p
+JOIN Reserva r ON p.IdPaquete = r.IdPaquete
+WHERE r.Fecha BETWEEN p.FechaInicio AND p.FechaTermino
+GROUP BY p.IdPaquete, p.Tipo
+ORDER BY TotalReservas DESC
+LIMIT 10;
+
